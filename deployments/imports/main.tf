@@ -15,4 +15,6 @@ provider "aws" {
   profile = "dsc"
 }
 
-
+resource "aws_route53_zone" "janmancc" {
+  name = "janman.cc"
+}
