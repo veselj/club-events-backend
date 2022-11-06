@@ -24,17 +24,4 @@ provider "aws" {
   profile = var.aws_profile
 }
 
-resource "aws_s3_bucket" "club-events-front-end" {
-  bucket = "club-events-front-end"
-  tags = {
-    Name = "To be distributed by cloud front"
-  }
-}
-
-resource "aws_s3_bucket_versioning" "club-events-front-end-ver" {
-  bucket = "club-events-front-end"
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
 
