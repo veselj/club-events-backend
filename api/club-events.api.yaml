@@ -1,0 +1,22 @@
+openapi: 3.1.0
+info:
+  version: "1.0.0"
+  title: create event API
+  description: The API for creating an event
+paths:
+  /create-event:
+      post:
+        description: create event API
+        operationId: createEvent
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                      - start_date
+                    properties:
+                        start_date:
+                          type: date
+
+
+

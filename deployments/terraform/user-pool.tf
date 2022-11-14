@@ -4,7 +4,7 @@ resource "aws_cognito_user_pool" "members-pool" {
 
   account_recovery_setting {
     recovery_mechanism {
-      name = "verified_email"
+      name     = "verified_email"
       priority = 1
     }
   }
@@ -13,60 +13,150 @@ resource "aws_cognito_user_pool" "members-pool" {
     allow_admin_create_user_only = false
   }
 
-  alias_attributes = ["email"]
+  # Forces to use a user name
+  // alias_attributes = ["email"]
+
+  username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
 
   //  device_configuration = ""
   //  domain = "dsc-members"
   email_configuration {
-    configuration_set = ""
-    email_sending_account = "COGNITO_DEFAULT"
-    from_email_address = ""
+    configuration_set      = ""
+    email_sending_account  = "COGNITO_DEFAULT"
+    from_email_address     = ""
     reply_to_email_address = ""
   }
   email_verification_message = null
   email_verification_subject = null
-  mfa_configuration = "OPTIONAL"
+  mfa_configuration          = "OPTIONAL"
   password_policy {
-    minimum_length = 8
-    require_lowercase = true
-    require_numbers = true
-    require_symbols = true
-    require_uppercase = true
+    minimum_length                   = 8
+    require_lowercase                = true
+    require_numbers                  = true
+    require_symbols                  = true
+    require_uppercase                = true
     temporary_password_validity_days = 7
   }
 
   schema {
-    name = "email"
-    attribute_data_type = "String"
+    name                     = "name"
+    attribute_data_type      = "String"
     developer_only_attribute = false
-    mutable = true
-    required = true
+    mutable                  = true
+    required                 = true
+    string_attribute_constraints {
+      max_length = 150
+      min_length = 1
+    }
+  }
+
+  schema {
+    name                     = "family_name"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
+    string_attribute_constraints {
+      max_length = 150
+      min_length = 1
+    }
+  }
+
+  schema {
+    name                     = "email"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
     string_attribute_constraints {
       max_length = 100
       min_length = 5
     }
   }
+
+  /** Custom Attributes */
   schema {
-    name = "family_name"
-    attribute_data_type = "String"
+    attribute_data_type      = "String"
     developer_only_attribute = false
-    mutable = true
-    required = true
+    mutable                  = true
+    name                     = "friend1"
+    required                 = false
     string_attribute_constraints {
-      max_length = 150
       min_length = 1
+      max_length = 40
     }
   }
+
   schema {
-    name = "name"
-    attribute_data_type = "String"
+    attribute_data_type      = "String"
     developer_only_attribute = false
-    mutable = true
-    required = true
+    mutable                  = true
+    name                     = "friend2"
+    required                 = false
     string_attribute_constraints {
-      max_length = 150
       min_length = 1
+      max_length = 40
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "friend3"
+    required                 = false
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 40
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "friend4"
+    required                 = false
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 40
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "friend5"
+    required                 = false
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 40
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "friend6"
+    required                 = false
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 40
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "friend7"
+    required                 = false
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 40
     }
   }
 
@@ -77,21 +167,21 @@ resource "aws_cognito_user_pool" "members-pool" {
   }
   user_attribute_update_settings {
     attributes_require_verification_before_update = [
-      "email"]
+      "email"
+    ]
   }
   user_pool_add_ons {
     advanced_security_mode = "OFF"
   }
-  username_attributes = null
-  username_configuration  {
+  username_configuration {
     case_sensitive = false
   }
   verification_message_template {
-    default_email_option = "CONFIRM_WITH_CODE"
-    email_message = "This is a confirmation message {####}"
-    email_subject = "Confirmation subject"
+    default_email_option  = "CONFIRM_WITH_CODE"
+    email_message         = "This is a confirmation message {####}"
+    email_subject         = "Confirmation subject"
     email_subject_by_link = "by link"
-    sms_message = "Code: {####}"
+    sms_message           = "Code: {####}"
   }
 }
 
@@ -138,22 +228,25 @@ resource "aws_cognito_user_group" "admins" {
 }
 
 resource "aws_cognito_user_pool_client" "members-pool_client" {
-  name                                 = "dsc-members-pool-client"
-  user_pool_id                         = aws_cognito_user_pool.members-pool.id
+  name                  = "dsc-members-pool-client"
+  user_pool_id          = aws_cognito_user_pool.members-pool.id
   access_token_validity = 24
   token_validity_units {
     access_token = "hours"
   }
-  generate_secret = false
+  generate_secret                      = false
   callback_urls                        = ["https://dsc-events.janman.cc/dashboard"]
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code", "implicit"]
   allowed_oauth_scopes                 = ["email", "openid"]
   supported_identity_providers         = ["COGNITO"]
-  logout_urls = ["https://dsc-events.janman.cc/logout"]
+  logout_urls                          = ["https://dsc-events.janman.cc/logout"]
 
-  read_attributes = [ "name", "family_name", "email"]
-  write_attributes = [ "name", "family_name", "email"]
+    read_attributes = [ "name", "family_name", "email", "custom:friend1", "custom:friend2", "custom:friend3", "custom:friend4", "custom:friend5", "custom:friend6", "custom:friend7"]
+    write_attributes = [ "name", "family_name", "email", "custom:friend1", "custom:friend2", "custom:friend3", "custom:friend4", "custom:friend5", "custom:friend6", "custom:friend7"]
+
+#  read_attributes  = ["name", "family_name", "email", "custom:friend1"]
+#  write_attributes = ["name", "family_name", "email", "custom:friend1"]
 }
 
 resource "aws_cognito_user_pool_domain" "dsc-members" {
@@ -163,12 +256,12 @@ resource "aws_cognito_user_pool_domain" "dsc-members" {
 
 resource "aws_cognito_user" "jan" {
   user_pool_id = aws_cognito_user_pool.members-pool.id
-  username     = "jan"
+  username     = "ian.vesely@gmail.com"
 
   attributes = {
-    email = "ian.vesely@gmail.com"
-    family_name = "Vesely"
-    name = "Jan"
+    email          = "ian.vesely@gmail.com"
+    family_name    = "Vesely"
+    name     = "Jan"
     email_verified = true
   }
 }
