@@ -11,4 +11,4 @@ Code that deals with the backend of club events app
   - [ ] DynamoDB
   - [ ] Cloud Front
   - [ ] Route 33
--  [ ] Implement Github Action for Lambda 
+  -  [ ] Implement Github Action for Lambda 

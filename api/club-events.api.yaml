@@ -1,22 +1,80 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   version: "1.0.0"
-  title: create event API
-  description: The API for creating an event
+  title: Club Events API
+  description: API supporting scheduling and supporting club events. This includes creation of an event, joining and event, assigning event leaders, updating details, etc.
 paths:
-  /create-event:
-      post:
-        description: create event API
-        operationId: createEvent
-        content:
+  /event:
+    put:
+      summary: Create a new event
+      description: Creates new event if not already exits
+      operationId: createEvent
+      requestBody:
+        $ref: '#/components/requestBodies/CreateEventBody'
+      responses:
+        '200':
+          description: Event created Ok
+          content:
             application/json:
-                schema:
-                    type: object
-                    required:
-                      - start_date
-                    properties:
-                        start_date:
-                          type: date
-
-
-
+              schema:
+                $ref: '#/components/schemas/creator'
+components:
+  requestBodies:
+    CreateEventBody:
+      description: Parameters of create event
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                $ref: '#/components/schemas/title'
+              destination:
+                $ref: '#/components/schemas/destination'
+              description:
+                $ref: '#/components/schemas/description'
+              creator:
+                $ref: '#/components/schemas/creator'
+              start:
+                $ref: '#/components/schemas/start'
+              end:
+                $ref: '#/components/schemas/end'
+              launch:
+                $ref: '#/components/schemas/launch'
+              retrieval:
+                $ref: '#/components/schemas/retrieval'
+              tidePeak:
+                $ref: '#/components/schemas/tidePeak'
+              tideDirection:
+                $ref: '#/components/schemas/tideDirection'
+  schemas:
+    title:
+      type: string
+    destination:
+      type: string
+    description:
+      type: string
+    creator:
+      type: string
+    start:
+      type: string
+      format: date-time
+    end:
+      type: string
+      format: date-time
+    launch:
+      type: string
+      format: date-time
+    retrieval:
+      type: string
+      format: date-time
+    tidePeak:
+      type: string
+      format: date-time
+    tideDirection:
+      type: string
+      enum:
+        - out
+        - in
+        - high
+        - low

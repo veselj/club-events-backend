@@ -4,15 +4,15 @@ Creates a new sailing or rowing event.
 
 ### Inputs
 
-* Member Id - unique id of the member creating the event
+* Creator Id - unique id of the member creating the event
 * Title - only a few words
 * Description - describes the event (a few sentences)
-* Start Date - event start date
+* Start Date - event start date (meet time)
 * End Date -  event end date (only if different from start date)
-* Meet Time - expected meet time on the start date
 * Launch Time - expected launch time
 * Off Water Time - expected off water time (on end date)
 * Tide Peek Time - expected tide changeover (optional)
+* Tide Direction - outgoing, incoming, low tide (tide peek time), high tide (tide peek time) 
 
 ### Outputs
 
