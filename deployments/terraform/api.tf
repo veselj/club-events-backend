@@ -14,22 +14,42 @@ resource "aws_apigatewayv2_api" "club-events-api" {
   body = data.template_file.club-events-openapi.rendered
 }
 
-resource "aws_apigatewayv2_authorizer" "club-events-api-auth" {
-  api_id           = aws_apigatewayv2_api.club-events-api.id
-  authorizer_type  = "JWT"
-  identity_sources = ["$request.header.Authorization"]
-  name             = "cognito-user-pool-authorizer"
+// Note: The authorizer is created via the openapi.yaml!
 
-  jwt_configuration {
-    audience = ["sailors","rowers"]
-    issuer   = "https://${aws_cognito_user_pool.members-pool.endpoint}"
-  }
-}
+#resource "aws_apigatewayv2_authorizer" "club-events-api-auth" {
+#  api_id           = aws_apigatewayv2_api.club-events-api.id
+#  authorizer_type  = "JWT"
+#  identity_sources = ["$request.header.Authorization"]
+#  name             = "cognito-user-pool-authorizer"
+#
+#  jwt_configuration {
+#    audience = ["sailors","rowers"]
+#    issuer   = "https://${aws_cognito_user_pool.members-pool.endpoint}"
+#  }
+#}
 
 resource "aws_apigatewayv2_stage" "club-events-api-dev" {
   api_id = aws_apigatewayv2_api.club-events-api.id
   name   = "dev"
 }
+
+// Note: The integration is created via the openapi.yaml!
+
+#resource "aws_apigatewayv2_integration" "club-events-api-integration" {
+#  api_id           = aws_apigatewayv2_api.club-events-api.id
+#  integration_type = "AWS_PROXY"
+#  connection_type = "INTERNET"
+#  integration_method = "POST"
+#  integration_uri    = "arn:aws:lambda:eu-west-1:072103297669:function:create-event"
+#}
+
+#resource "aws_apigatewayv2_route" "club-events-api-create-event" {
+#  api_id    = aws_apigatewayv2_api.club-events-api.id
+#  route_key = "PUT /event"
+#  authorizer_id = aws_apigatewayv2_authorizer.club-events-api-auth.id
+#
+#  target = "integrations/${aws_apigatewayv2_integration.club-events-api-integration.id}"
+#}
 
 #resource "aws_apigatewayv2_deployment" "club-events-api-dev-deployment" {
 #  api_id      = aws_apigatewayv2_api.club-events-api.id

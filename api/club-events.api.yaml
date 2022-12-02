@@ -18,7 +18,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/creator'
+      security:
+        - cognito-user-pool-authorizer: [ ]
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "aws_proxy"
+        httpMethod: "POST"
+        timeoutInMillis: 5000
+        uri: "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:072103297669:function:create-event/invocations"
+        connectionType: "INTERNET"
 components:
+  securitySchemes:
+    cognito-user-pool-authorizer:
+      type: "oauth2"
+      flows: { }
+      x-amazon-apigateway-authorizer:
+        identitySource: "$request.header.Authorization"
+        jwtConfiguration:
+          audience:
+            - "rowers"
+            - "sailors"
+          issuer: "https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_7DSlJxCrB"
+        type: "jwt"
   requestBodies:
     CreateEventBody:
       description: Parameters of create event
@@ -78,3 +99,14 @@ components:
         - in
         - high
         - low
+x-amazon-apigateway-cors:
+    allowMethods:
+      - "GET"
+      - "OPTIONS"
+      - "POST"
+      - "PUT"
+    maxAge: 0
+    allowCredentials: false
+    allowOrigins:
+      - "*"
+x-amazon-apigateway-importexport-version: "1.0"

@@ -20,5 +20,11 @@ terraform_apply:
 	cd deployments/terraform && \
 	terraform apply -auto-approve
 
+# terraform state list
+# terraform state rm aws_apigatewayv2_api.club-events-api
+terraform_destroy:
+	cd deployments/terraform && \
+	terraform destroy -target aws_apigatewayv2_api.club-events-api
+
 login:
 	ssh-add ~/.ssh/veselj_github.rsa
