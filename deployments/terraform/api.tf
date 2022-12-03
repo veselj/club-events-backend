@@ -33,6 +33,15 @@ resource "aws_apigatewayv2_stage" "club-events-api-dev" {
   name   = "dev"
 }
 
+resource "aws_apigatewayv2_deployment" "club-events-api-dev-deployment" {
+  api_id      = aws_apigatewayv2_api.club-events-api.id
+  description = "Dev deployment"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 // Note: The integration is created via the openapi.yaml!
 
 #resource "aws_apigatewayv2_integration" "club-events-api-integration" {
@@ -43,6 +52,8 @@ resource "aws_apigatewayv2_stage" "club-events-api-dev" {
 #  integration_uri    = "arn:aws:lambda:eu-west-1:072103297669:function:create-event"
 #}
 
+// Note: The route is created via the openapi.yaml!
+
 #resource "aws_apigatewayv2_route" "club-events-api-create-event" {
 #  api_id    = aws_apigatewayv2_api.club-events-api.id
 #  route_key = "PUT /event"
@@ -51,11 +62,4 @@ resource "aws_apigatewayv2_stage" "club-events-api-dev" {
 #  target = "integrations/${aws_apigatewayv2_integration.club-events-api-integration.id}"
 #}
 
-#resource "aws_apigatewayv2_deployment" "club-events-api-dev-deployment" {
-#  api_id      = aws_apigatewayv2_api.club-events-api.id
-#  description = "Dev deployment"
-#
-#  lifecycle {
-#    create_before_destroy = true
-#  }
-#}
+

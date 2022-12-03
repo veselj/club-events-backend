@@ -9,6 +9,8 @@
 .terraform/
 .terraform.lock.hcl
 terraform.tfstate
+deployments/bin
+lambda/lambda
 
 # Test binary, built with `go test -c`
 *.test

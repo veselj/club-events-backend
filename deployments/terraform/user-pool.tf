@@ -237,6 +237,7 @@ resource "aws_cognito_user_pool_client" "members-pool_client" {
   generate_secret                      = false
   callback_urls                        = ["https://dsc-events.janman.cc/dashboard"]
   allowed_oauth_flows_user_pool_client = true
+  explicit_auth_flows = [ "USER_PASSWORD_AUTH" ]
   allowed_oauth_flows                  = ["code", "implicit"]
   allowed_oauth_scopes                 = ["email", "openid"]
   supported_identity_providers         = ["COGNITO"]

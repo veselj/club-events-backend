@@ -19,7 +19,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/creator'
       security:
-        - cognito-user-pool-authorizer: [ ]
+        - cognito-user-pool-authorizer: []
       x-amazon-apigateway-integration:
         payloadFormatVersion: "1.0"
         type: "aws_proxy"
@@ -31,13 +31,12 @@ components:
   securitySchemes:
     cognito-user-pool-authorizer:
       type: "oauth2"
-      flows: { }
+      flows: {}
       x-amazon-apigateway-authorizer:
         identitySource: "$request.header.Authorization"
         jwtConfiguration:
           audience:
-            - "rowers"
-            - "sailors"
+            - "4eibtfrfs79vrnuhr1ggmceif3"
           issuer: "https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_7DSlJxCrB"
         type: "jwt"
   requestBodies:
